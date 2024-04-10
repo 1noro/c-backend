@@ -13,6 +13,7 @@ help: ## Makefile help
 build-cgi: ## Build CGI binary
 #	gcc -o bin/action.cgi src/action.c
 	docker run --rm -v "$(CURRENT_DIR)/src":/usr/src/myapp -w /usr/src/myapp gcc:$(GCC_VERSION) gcc -o action.cgi action.c
+	@mkdir -p bin
 	@mv -f src/action.cgi bin/action.cgi
 
 .PHONY: build-server
@@ -24,7 +25,6 @@ build: build-cgi build-server ## Build docker image
 
 .PHONY: up
 up: build ## Build and runs the server in docker
-	@mkdir -p bin
 	docker run -d --name $(PROJECT_NAME)-container -p 1337:80 -v "$(CURRENT_DIR)/public":/usr/local/apache2/htdocs/ -v "$(CURRENT_DIR)/bin":/usr/local/apache2/cgi-bin/ $(PROJECT_NAME)-image:latest
 	@echo "Server running in http://localhost:1337/"
 
