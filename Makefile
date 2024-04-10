@@ -24,6 +24,7 @@ build: build-cgi build-server ## Build docker image
 
 .PHONY: up
 up: build ## Build and runs the server in docker
+	@mkdir -p bin
 	docker run -d --name $(PROJECT_NAME)-container -p 1337:80 -v "$(CURRENT_DIR)/public":/usr/local/apache2/htdocs/ -v "$(CURRENT_DIR)/bin":/usr/local/apache2/cgi-bin/ $(PROJECT_NAME)-image:latest
 	@echo "Server running in http://localhost:1337/"
 
